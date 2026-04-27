@@ -8,7 +8,9 @@ import "@/App.css";
 const WhatToWatch = () => {
   const [query, setQuery] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    const response = await fetch("loca")
+
     e.preventDefault();
   };
 
@@ -48,6 +50,7 @@ const WhatToWatch = () => {
               />
               <Button
               id="search-button"
+              onClick={handleSubmit}
                 type="submit"
                 className="absolute right-2 top-1/2 -translate-y-1/2 h-10 px-6 rounded-full"
               >
