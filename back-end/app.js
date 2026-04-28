@@ -15,11 +15,8 @@ app.use(cors({
 app.use(express.json());
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-})
 
 app.post('/recommend', async (req, res) => {
     const { input } = req.body;
@@ -69,6 +66,7 @@ IMPORTANT: Respond ONLY with the following JSON format, nothing else.
     const data = JSON.parse(cleanText);
 
     res.json(data);
+    console.log(data);
 });
 
 const PORT = process.env.PORT 
