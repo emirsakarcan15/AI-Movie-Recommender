@@ -9,9 +9,16 @@ const WhatToWatch = () => {
   const [query, setQuery] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    const response = await fetch("loca")
+    const response = await fetch("http://localhost:3000/recommend", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ input: query })
+    });
 
-    e.preventDefault();
+    const data = await response.json();
+    console.log(data);
   };
 
   return (
