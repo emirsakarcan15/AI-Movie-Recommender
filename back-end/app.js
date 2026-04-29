@@ -65,8 +65,7 @@ IMPORTANT: Respond ONLY with the following JSON format, nothing else.
 
     const data = JSON.parse(cleanText);
 
-    res.json(data);
-    console.log(data);
+    res.status(200).json(data);
 });
 
 const PORT = process.env.PORT 
