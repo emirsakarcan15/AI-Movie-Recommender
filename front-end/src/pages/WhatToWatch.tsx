@@ -4,11 +4,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import FadeContent from "@/components/FadeContent";
 import "@/App.css";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 const WhatToWatch = () => {
   const [query, setQuery] = useState("");
+  const navigate = useNavigate();
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     const response = await fetch("http://localhost:3000/recommend", {
       method: "POST",
       headers: {
@@ -17,8 +22,13 @@ const WhatToWatch = () => {
       body: JSON.stringify({ input: query })
     });
 
-    const data = await response.json();
-    console.log(data);
+    if (response.ok) {
+      navigate("/recommendations");
+    }
+    else {
+      toast.error("Failed to get recommendations. Please try again.");
+    }
+
   };
 
   return (
@@ -57,7 +67,6 @@ const WhatToWatch = () => {
               />
               <Button
               id="search-button"
-              onClick={handleSubmit}
                 type="submit"
                 className="absolute right-2 top-1/2 -translate-y-1/2 h-10 px-6 rounded-full"
               >
