@@ -23,7 +23,7 @@ const WhatToWatch = () => {
     });
 
     if (response.ok) {
-      navigate("/recommendations");
+      navigate("/recommendations",);
     }
     else {
       toast.error("Failed to get recommendations. Please try again.");
