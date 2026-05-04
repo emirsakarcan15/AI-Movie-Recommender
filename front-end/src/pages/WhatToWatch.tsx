@@ -4,12 +4,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import FadeContent from "@/components/FadeContent";
 import "@/App.css";
-import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import Recommendations from "./Recommendations";
+import { useRef } from "react";
 
 const WhatToWatch = () => {
   const [query, setQuery] = useState("");
-  const navigate = useNavigate();
+  const [recommendations, setRecommendations] = useState({});
+  const [isSearched, setIsSearched] = useState(false);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
   
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,7 +26,10 @@ const WhatToWatch = () => {
     });
 
     if (response.ok) {
-      navigate("/recommendations",);
+      sectionRef.current?.scrollIntoView({ behavior: "smooth" });
+      const data = await response.json();
+      setRecommendations(data);
+      setIsSearched(true);
     }
     else {
       toast.error("Failed to get recommendations. Please try again.");
@@ -76,6 +82,14 @@ const WhatToWatch = () => {
           </div>
         </FadeContent>
       </main>
+
+      <div ref={sectionRef} className="px-6 py-10">
+
+        {
+          isSearched ? <Recommendations recommendations={recommendations} /> : null
+        }
+
+      </div>
 
       {/* Footer - contact info */}
       <footer className="border-t border-border py-10 px-6">
