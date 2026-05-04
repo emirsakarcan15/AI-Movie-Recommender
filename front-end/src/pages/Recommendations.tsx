@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { toast } from 'sonner';
 
-function Recommendations() {
+function Recommendations({recommendations}: {recommendations: any}) {
 
   const fetchRecommendations = async () => {
     try {
@@ -21,18 +21,18 @@ function Recommendations() {
     } catch (error) {
       toast.error("An error occurred while fetching recommendations. Please try again.");
     }
+}
 
-  useEffect(() => {
+useEffect(() => {
     fetchRecommendations();
   }, []);
-}
 
   
 
 
 
   return (
-    <div>Recommendations</div>
+    <div>{recommendations.films.map((film: any) => <div key={film.title}> <p>{film.title}</p></div>)}</div>
   )
 }
 

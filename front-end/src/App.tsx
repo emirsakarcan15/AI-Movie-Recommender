@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import WhatToWatch from "./pages/WhatToWatch";
 import NotFound from "./pages/NotFound";
-import Recommendations from "./pages/Recommendations";
 
 const queryClient = new QueryClient();
 
@@ -18,7 +17,6 @@ const App = () => (
         <Routes>
           <Route path="/" element={<WhatToWatch />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="/recommendations" element={<Recommendations />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
