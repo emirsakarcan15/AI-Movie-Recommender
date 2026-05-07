@@ -68,6 +68,29 @@ IMPORTANT: Respond ONLY with the following JSON format, nothing else.
     res.status(200).json(data);
 });
 
+app.post("/films", async (req, res) => {
+    const films = req.body.films;
+
+    const results = await Promise.all(films.map(async (film) => {
+        const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(film)}`, {
+            method: "GET",
+            headers: {
+                accept: "application/json",
+                Authorization: `Bearer ${process.env.TMDB_API_KEY}`
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            return data.results[0];
+        } else {
+            return null;
+        }
+    }));
+
+    res.status(200).json(results);
+})
+
 const PORT = process.env.PORT 
 
 const startServer = () => {

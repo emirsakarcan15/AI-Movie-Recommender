@@ -3,32 +3,33 @@ import { toast } from 'sonner';
 
 function Recommendations({recommendations}: {recommendations: any}) {
 
+  const [filmResponses, setFilmResponses] = React.useState([]);
+
   const fetchRecommendations = async () => {
+    recommendations.films = recommendations.films.map((film: any) => film.title);
+
     try {
-      const response = await fetch("http://localhost:3000/recommend", {
-        method: "GET",
+      const response = await fetch("http://localhost:3000/films", {
+        method: "POST",
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ films: recommendations.films }),
       });
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-      }
-      else {
-        toast.error("Failed to fetch recommendations. Please try again.");
-      }
-    } catch (error) {
-      toast.error("An error occurred while fetching recommendations. Please try again.");
+    if (response.ok) {
+      const data = await response.json();
+      setFilmResponses(data);
+    } else {
+      toast.error("Failed to fetch film details. Please try again.");
     }
-}
+    } catch (error) {
+      toast.error("An error occurred while fetching film details. Please try again.");
+    }
+  }
 
 useEffect(() => {
     fetchRecommendations();
   }, []);
-
-  
-
 
 
   return (
