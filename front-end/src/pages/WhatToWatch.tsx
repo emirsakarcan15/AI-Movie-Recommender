@@ -72,6 +72,7 @@ const WhatToWatch = () => {
                 className="h-14 pl-12 pr-32 bg-card border-border text-base rounded-full focus-visible:ring-1 focus-visible:ring-ring"
               />
               <Button
+              style={{  }}
               id="search-button"
                 type="submit"
                 className="absolute right-2 top-1/2 -translate-y-1/2 h-10 px-6 rounded-full"
