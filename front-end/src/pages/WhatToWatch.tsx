@@ -7,15 +7,18 @@ import "@/App.css";
 import { toast } from "sonner";
 import Recommendations from "./Recommendations";
 import { useRef } from "react";
+import Loading from "@/components/ui/loading";
 
 const WhatToWatch = () => {
   const [query, setQuery] = useState("");
   const [recommendations, setRecommendations] = useState({});
   const [isSearched, setIsSearched] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const sectionRef = useRef<HTMLDivElement | null>(null);
   
 
   const handleSubmit = async (e: React.FormEvent) => {
+    setIsLoading(true);
     e.preventDefault();
     const response = await fetch("http://localhost:3000/recommend", {
       method: "POST",
@@ -26,12 +29,14 @@ const WhatToWatch = () => {
     });
 
     if (response.ok) {
-      sectionRef.current?.scrollIntoView({ behavior: "smooth" });
+      setIsLoading(false);
       const data = await response.json();
       setRecommendations(data);
+      sectionRef.current?.scrollIntoView({ behavior: "smooth" });
       setIsSearched(true);
     }
     else {
+      setIsLoading(false);
       toast.error("Failed to get recommendations. Please try again.");
     }
 
@@ -39,7 +44,8 @@ const WhatToWatch = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
-      {/* Header */}
+      {
+        isLoading ? <div className="min-h-screen flex items-center justify-center bg-background" ><Loading /></div> : <div className="min-h-screen bg-background text-foreground flex flex-col">{/* Header */}
       <header className="py-8 px-6">
         <FadeContent blur duration={600}>
           <h1 className="font-display text-2xl font-light tracking-[0.3em] text-center">
@@ -84,10 +90,13 @@ const WhatToWatch = () => {
         </FadeContent>
       </main>
 
+      <div style={{ marginTop: "200px"}} >
+      </div>
+
       <div ref={sectionRef} className="px-6 py-10">
 
         {
-          isSearched ? <Recommendations recommendations={recommendations} /> : null
+          isSearched ? <Recommendations recommendations={recommendations} isSearched={isSearched} /> : null
         }
 
       </div>
@@ -95,35 +104,21 @@ const WhatToWatch = () => {
       {/* Footer - contact info */}
       <footer className="border-t border-border py-10 px-6">
         <FadeContent blur duration={600}>
-          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-            <div className="flex flex-col items-center md:items-start gap-2">
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Mail className="w-4 h-4" />
-                <span className="font-body text-xs uppercase tracking-[0.2em]">E-mail</span>
-              </div>
-              <p className="font-body text-sm">hello@whattowatch.com</p>
+            <div className="max-w-4xl mx-auto flex flex-col items-center gap-2 text-center">
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Mail className="w-4 h-4" />
+                  <span className="font-body text-xs uppercase tracking-[0.2em]">E-mail</span>
+                </div>
+                <p className="font-body text-sm">hello@whattowatch.com</p>
             </div>
-            <div className="flex flex-col items-center md:items-start gap-2">
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Phone className="w-4 h-4" />
-                <span className="font-body text-xs uppercase tracking-[0.2em]">Phone</span>
-              </div>
-              <p className="font-body text-sm">+90 (212) 000 00 00</p>
-            </div>
-            <div className="flex flex-col items-center md:items-start gap-2">
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <MapPin className="w-4 h-4" />
-                <span className="font-body text-xs uppercase tracking-[0.2em]">Adress</span>
-              </div>
-              <p className="font-body text-sm">İstanbul, Turkey</p>
-            </div>
-          </div>
-          <p className="text-center font-body text-xs text-muted-foreground mt-10">
-            © 2026 whattowatch. All rights reserved.
-
-          </p>
+            <p className="text-center font-body text-xs text-muted-foreground mt-10">
+              © 2026 whattowatch. All rights reserved.
+            </p>
         </FadeContent>
       </footer>
+      </div>
+        
+      }
     </div>
   );
 };
