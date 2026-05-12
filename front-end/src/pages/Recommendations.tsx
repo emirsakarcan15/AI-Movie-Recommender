@@ -6,61 +6,12 @@ import FadeContent from "@/components/FadeContent";
 import { Button } from "@/components/ui/button";
 
 
-interface Movie {
-  cover: string;
-  title: string;
-  director: string;
-  plot: string;
-  rating: number;
-  ageLimit: string;
-  year: number;
-  genre: string;
-  votes: number;
-}
-
-
-const movies: Movie[] = [
-  {
-    cover: null,
-    title: "Neon Horizon",
-    director: "Ava Lindqvist",
-    plot: "Yakın gelecekte bir veri kaçakçısı, hafızasına yüklenen bir sırrın peşindeki yapay zekâdan kaçmak zorundadır.",
-    rating: 8.4,
-    ageLimit: "16+",
-    year: 2024,
-    genre: "Bilim Kurgu",
-    votes: 124583,
-  },
-  {
-    cover: null,
-    title: "Akşamın Rengi",
-    director: "Mert Yılmaz",
-    plot: "Ege'de küçük bir kasabada karşılaşan iki yabancının, bir yaz boyunca süren sessiz aşk hikâyesi.",
-    rating: 7.9,
-    ageLimit: "13+",
-    year: 2023,
-    genre: "Romantik Drama",
-    votes: 48217,
-  },
-  {
-    cover: null,
-    title: "Sessiz Yağmur",
-    director: "Hanae Tanaka",
-    plot: "Emekli bir dedektif, kendi geçmişine kadar uzanan bir seri cinayet vakasıyla yüzleşmek zorunda kalır.",
-    rating: 8.1,
-    ageLimit: "18+",
-    year: 2025,
-    genre: "Gerilim",
-    votes: 87654,
-  },
-]
-
-
 const formatVotes = (n: number) => new Intl.NumberFormat("tr-TR").format(n)
 
-function Recommendations({recommendations}: {recommendations: any}) {
+function Recommendations({recommendations, isSearched}: {recommendations: any, isSearched: boolean}) {
 
   const [filmResponses, setFilmResponses] = React.useState([]);
+  const [plus18, setPlus18] = React.useState(false);
 
   const fetchRecommendations = async () => {
     recommendations.films = recommendations.films.map((film: any) => film.title);
@@ -86,13 +37,13 @@ function Recommendations({recommendations}: {recommendations: any}) {
 
 useEffect(() => {
     fetchRecommendations();
-  }, []);
+  }, [isSearched]);
 
 
 
 
   return (
-    <div style={{ "marginTop": "50px" }} >
+    <div >
 
       <main className="flex-1 px-6 py-10 max-w-7xl mx-auto w-full">
         <FadeContent blur duration={600}>
@@ -107,7 +58,7 @@ useEffect(() => {
         <div className="flex flex-col gap-8 max-w-4xl mx-auto">
           {filmResponses.map((m, i) => (
             <FadeContent key={m.title} blur duration={700} delay={150 + i * 150}>
-              <article className="group flex flex-col sm:flex-row bg-card border border-border rounded-lg overflow-hidden transition-all duration-500 hover:border-pink-500 hover:shadow-[0_0_40px_-5px_rgba(236,72,153,0.5)]">
+              <article className="group flex flex-col sm:flex-row bg-card border border-border rounded-lg overflow-hidden transition-all duration-500 hover:border-white hover:shadow-[0_0_40px_-5px_rgba(255,255,255,0.6)]">
                 <div className="relative sm:w-56 sm:shrink-0 aspect-[2/3] sm:aspect-auto overflow-hidden bg-muted">
                   <img
                     src={`https://image.tmdb.org/t/p/w500${m.poster_path}`}
@@ -119,11 +70,8 @@ useEffect(() => {
                   />
                   <div className="absolute top-3 right-3 flex items-center gap-1 bg-background/80 backdrop-blur px-2.5 py-1 rounded-full">
                     <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-                    <span className="font-body text-xs font-medium">{m.vote_average}</span>
-                  </div>
-                  <div className="absolute top-3 left-3 bg-background/80 backdrop-blur px-2.5 py-1 rounded-full">
-                    <span className="font-body text-xs font-medium">{m.ageLimit}</span>
-                  </div>
+                    <span className="font-body text-xs font-medium">{m.vote_average.toFixed(2)}</span>
+                  </div>                  
                 </div>
 
                 <div className="flex-1 p-6 flex flex-col gap-4">
@@ -131,7 +79,7 @@ useEffect(() => {
                     <p className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
                      {m.release_date.split("-")[0]}
                     </p>
-                    <h3 className="font-display text-2xl font-medium leading-tight">{m.title}</h3>
+                    <h3 style={{ "marginTop": "30px" }} className="font-display text-2xl font-medium leading-tight">{m.title}</h3>
                   </div>
 
                   <p className="font-body text-sm text-muted-foreground leading-relaxed flex-1">
