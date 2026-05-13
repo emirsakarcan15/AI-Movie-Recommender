@@ -11,7 +11,6 @@ const formatVotes = (n: number) => new Intl.NumberFormat("tr-TR").format(n)
 function Recommendations({recommendations, isSearched}: {recommendations: any, isSearched: boolean}) {
 
   const [filmResponses, setFilmResponses] = React.useState([]);
-  const [plus18, setPlus18] = React.useState(false);
 
   const fetchRecommendations = async () => {
     recommendations.films = recommendations.films.map((film: any) => film.title);
@@ -38,9 +37,6 @@ function Recommendations({recommendations, isSearched}: {recommendations: any, i
 useEffect(() => {
     fetchRecommendations();
   }, [isSearched]);
-
-
-
 
   return (
     <div >
