@@ -18,6 +18,7 @@ const WhatToWatch = () => {
   
 
   const handleSubmit = async (e: React.FormEvent) => {
+    setIsSearched(false);
     setIsLoading(true);
     e.preventDefault();
     const response = await fetch("http://localhost:3000/recommend", {
@@ -32,8 +33,8 @@ const WhatToWatch = () => {
       setIsLoading(false);
       const data = await response.json();
       setRecommendations(data);
-      sectionRef.current?.scrollIntoView({ behavior: "smooth" });
       setIsSearched(true);
+      sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
     else {
       setIsLoading(false);
@@ -89,9 +90,6 @@ const WhatToWatch = () => {
           </div>
         </FadeContent>
       </main>
-
-      <div style={{ marginTop: "200px"}} >
-      </div>
 
       <div ref={sectionRef} className="px-6 py-10">
 
